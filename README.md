@@ -100,6 +100,7 @@ CREATE TABLE urls (
 ## More feature
 1. 實作cache - 用go-cache這個library或是Redis將url的id和redirect方向暫存，來增加效率。
 2. 將function和struct分類變得更有架構 - 例如分成router, model, util等等。
+3. 增加test數量 - 用python獲取10000個url，並隨機生成expireDate，轉換成短網址並記錄，再用短網址測試api是否處理正確。
 ## Project setup (docker)
 ```
 docker-compose up
