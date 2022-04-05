@@ -27,13 +27,14 @@ const (
 	user     = "postgres"
 	password = "postgres"
 	dbname   = "postgres"
-	domain = "ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com"
+	// localDomain = "http://localhost:3001/"
+	domain = "http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/"
 )
 
 func setupDB() *sql.DB {
 	dbinfo := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", host, user, password, dbname)
 	db, err := sql.Open("postgres", dbinfo)
-	fmt.Println("Successfully created connection to database")
+	fmt.Println("Server successfully connect to database")
 
 	if err != nil {
 		panic(err)
@@ -45,13 +46,14 @@ func setupDB() *sql.DB {
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/{url_id}", get_url).Methods("GET")
-	router.HandleFunc("/api/v1/urls", post_url).Methods("POST")
+	router.HandleFunc("/{url_id}", Get).Methods("GET")
+	router.HandleFunc("/api/v1/urls", Post).Methods("POST")
 
+	fmt.Println("Server successfully setup")
 	log.Fatal(http.ListenAndServe(":3001", router))
 }
 
-func get_url(w http.ResponseWriter, r *http.Request) {
+func Get(w http.ResponseWriter, r *http.Request) {
 	loc, err := time.LoadLocation("")
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -77,11 +79,17 @@ func get_url(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 
-func post_url(w http.ResponseWriter, r *http.Request) {
+func Post(w http.ResponseWriter, r *http.Request) {
 	var req URL
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		fmt.Println("Error in decode")
+		return
+	}
+
+	if req.Url == "" || req.ExpireAt == "" {
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -90,6 +98,7 @@ func post_url(w http.ResponseWriter, r *http.Request) {
 	err = db.QueryRow("INSERT INTO urls(link, expireAt) VALUES($1, $2) returning url_id", req.Url, req.ExpireAt).Scan(&returnID)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println("Error in insert")
 		panic(err)
 	}
 
@@ -99,7 +108,7 @@ func post_url(w http.ResponseWriter, r *http.Request) {
 	id := strconv.Itoa(returnID)
 	returnUrl := make(map[string]string)
 	returnUrl["id"] = id
-	returnUrl["shortUrl"] = domain + id
+	returnUrl["shortUrl"] = localDomain + id
 
 	response, err := json.Marshal(returnUrl)
 	if err != nil {
