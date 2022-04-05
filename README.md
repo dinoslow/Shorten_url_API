@@ -4,7 +4,7 @@
 #### This project will shorten the given url and redirect the shorten url to the given original url.
 
 ## Usage
-![image](http://github.com/dinoslow/Shorten_url_API/blob/main/example.gif)
+![image](https://github.com/dinoslow/Shorten_url_API/blob/main/example.gif)
 
 Post a url with expire date.
 
@@ -25,6 +25,7 @@ Then, use the shorten url to go to the original website.
 ```
 curl -L -X GET http://localhost:3001/3
 ```
+Redirect to google.com
 
 ## How API works
 GET Method -> Redirect shorten url to the original url
@@ -49,9 +50,21 @@ func Post(w http.ResponseWriter, r *http.Request) {
     
 }
 ```
-## Other functions
+## Deploy on AWS
+To implement reverse proxy. I deployed my project to AWS and used Nginx as reverse proxy.
+*Post with req.Body*
 ```
+http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/api/v1/urls
+
+    with 
+
+{
+    "url":"http://www.youtube.com",
+    "expireAt":"2023-01-01T00:00:00Z"
+}
 ```
+http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/1
+http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/2
 
 ## Database
 ```sql=
