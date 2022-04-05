@@ -9,7 +9,7 @@
 Post a url with expire date.
 
 ```
-curl -X POST -H "Content-Type:application/json" http://localhost/api/v1/urls -d '{
+curl -X POST -H "Content-Type:application/json" http://localhost:3001/api/v1/urls -d '{
    "url": "http://www.google.com",
     "expireAt": "2023-01-01T00:00:00Z"
 }'
