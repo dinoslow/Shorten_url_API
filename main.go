@@ -27,7 +27,7 @@ const (
 	user     = "postgres"
 	password = "postgres"
 	dbname   = "postgres"
-	// localDomain = "http://localhost:3001/"
+	// domain = "http://localhost:3001/"
 	domain = "http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/"
 )
 
@@ -108,7 +108,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	id := strconv.Itoa(returnID)
 	returnUrl := make(map[string]string)
 	returnUrl["id"] = id
-	returnUrl["shortUrl"] = localDomain + id
+	returnUrl["shortUrl"] = domain + id
 
 	response, err := json.Marshal(returnUrl)
 	if err != nil {
