@@ -1,10 +1,30 @@
 <h1 align="center">Shorten_url_API</h1>
-![image](https://github.com/dinoslow/Shorten_url_API/blob/main/example.gif)
 
 ## Description
-This project will shorten the given url and redirect the shorten url to original url
+#### This project will shorten the given url and redirect the shorten url to the given original url.
 
 ## Usage
+![image](http://github.com/dinoslow/Shorten_url_API/blob/main/example.gif)
+
+Post a url with expire date.
+
+```
+curl -X POST -H "Content-Type:application/json" http://localhost/api/v1/urls -d '{
+   "url": "http://www.google.com",
+    "expireAt": "2023-01-01T00:00:00Z"
+}'
+```
+server will return a shorten url.
+```
+{
+    "id": "3",
+    "shortUrl": "http://localhost:3001/3"
+}
+```
+Then, use the shorten url to go to the original website.
+```
+curl -L -X GET http://localhost:3001/3
+```
 
 ## How API works
 GET Method -> Redirect shorten url to the original url
