@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -28,6 +27,7 @@ const (
 	user     = "postgres"
 	password = "postgres"
 	dbname   = "postgres"
+	domain = "ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com"
 )
 
 func setupDB() *sql.DB {
@@ -35,15 +35,11 @@ func setupDB() *sql.DB {
 	db, err := sql.Open("postgres", dbinfo)
 	fmt.Println("Successfully created connection to database")
 
-	checkErr(err)
-
-	return db
-}
-
-func checkErr(err error) {
 	if err != nil {
 		panic(err)
 	}
+
+	return db
 }
 
 func main() {
@@ -103,7 +99,7 @@ func post_url(w http.ResponseWriter, r *http.Request) {
 	id := strconv.Itoa(returnID)
 	returnUrl := make(map[string]string)
 	returnUrl["id"] = id
-	returnUrl["shortUrl"] = "http://localhost/" + id
+	returnUrl["shortUrl"] = domain + id
 
 	response, err := json.Marshal(returnUrl)
 	if err != nil {
