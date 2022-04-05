@@ -64,8 +64,11 @@ http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/api/v1/urls
 }
 ```
 http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/1
+
+---
 http://ec2-52-197-102-90.ap-northeast-1.compute.amazonaws.com/2
 
+---
 ## Database
 ```sql=
 CREATE TABLE urls (
@@ -88,6 +91,9 @@ CREATE TABLE urls (
 #### *"stretchr/testify/assert"*
 我使用了這個library來用作test.go裡面的斷言，使用上相對簡潔。
 
+## More feature
+1. 實作cache - 用go-cache這個library或是Redis將url的id和redirect方向暫存，來增加效率。
+2. 將function和struct分類變得更有架構 - 例如分成router, model, util等等。
 ## Project setup (docker)
 ```
 docker-compose up
